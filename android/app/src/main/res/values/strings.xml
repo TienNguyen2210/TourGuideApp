@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tourmate App</string>
+    <string name="facebook_app_id">1478246259452117</string>
+    <string name="fb_login_protocol_scheme">fb1478246259452117</string>
+    <string name="facebook_client_token">c027263389a8d5149aaec59c0dd47296</string>
+</resources>

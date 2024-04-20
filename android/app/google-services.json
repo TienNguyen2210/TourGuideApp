@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1055777289712",
+    "project_id": "tourmate-app-b2264",
+    "storage_bucket": "tourmate-app-b2264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055777289712:android:3e0a35d5845f68fc8ad935",
+        "android_client_info": {
+          "package_name": "com.example.tour_guide_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055777289712-184gt1g1n6a26e735vnjmt1ik1b8mpqv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tour_guide_app",
+            "certificate_hash": "eabafd6067728b8871a59f1278f95e535268aad5"
+          }
+        },
+        {
+          "client_id": "1055777289712-q9ejoucrsnve5o1v67imq0t8lcloboj7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTYcIMC3rQV8-1tZ-7hNjG4pj8drdy5Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055777289712-q9ejoucrsnve5o1v67imq0t8lcloboj7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1055777289712-fmbi1uginomq3vkfdqfiaufrd6p1j74r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.tourGuideApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
