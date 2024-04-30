@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide_app/pages/login_page.dart';
 import 'package:tour_guide_app/service/auth.dart';
 
 class UserProfile extends StatelessWidget {
