@@ -48,9 +48,16 @@ dependencies:
   google_api_headers: ^1.6.0
   
 
+  # This adds in the rating for the post.
+  flutter_rating_bar: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Mockito is used to create mock objects for testing
+  mockito: ^5.0.0
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

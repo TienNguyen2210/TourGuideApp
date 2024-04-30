@@ -14,8 +14,9 @@ class FilterOption {
   FilterOption({required this.text, required this.iconData});
 }
 
-class SearchSreen extends StatefulWidget {
-  const SearchSreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
+
 
   @override
   State<SearchSreen> createState() => _SearchSreenState();

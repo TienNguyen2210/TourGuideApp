@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_guide_app/pages/signup_page.dart';
 import 'package:tour_guide_app/pages/user_profile_page.dart';
-import 'package:tour_guide_app/pages/password_recovery.dart'; 
+import 'package:tour_guide_app/pages/password_recovery.dart';
 import 'package:tour_guide_app/service/auth.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 35),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 15),  
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 height: 55,
                 child: TextField(
                   controller: emailController,
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(15)),
                       borderSide: BorderSide(color: Color.fromARGB(255, 255, 153, 0)),
-                    ),  
+                    ),
                   ),
                 ),
               ),
@@ -148,22 +148,22 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 10),
               Container(
-                width: 380,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: facebookSignIn,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 59, 89, 152),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.facebook, color: Colors.white, size: 33),
-                      SizedBox(width: 57),
-                      Text('Sign In with Facebook', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                    ],
-                  ),
-                )
+                  width: 380,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: facebookSignIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 59, 89, 152),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.facebook, color: Colors.white, size: 33),
+                        SizedBox(width: 57),
+                        Text('Sign In with Facebook', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                      ],
+                    ),
+                  )
               ),
               SizedBox(height: 13),
               Row(
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
-      errorMessage = e.toString();  
+      errorMessage = e.toString();
     }
   }
 
@@ -211,10 +211,10 @@ class _LoginScreenState extends State<LoginScreen> {
         );
       }
     } catch (e) {
-      errorMessage = e.toString();  
+      errorMessage = e.toString();
     }
-  } 
- 
+  }
+
   Future<void> signIn() async {
     try {
       await Auth().signInWithEmailAndPassword(

@@ -16,7 +16,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   final List<Widget> _screens = <Widget>[
     HomeScreen(),
-    SearchSreen(),
+    SearchScreen(),
     PostScreen(),
     ProfileScreen(),
   ];
