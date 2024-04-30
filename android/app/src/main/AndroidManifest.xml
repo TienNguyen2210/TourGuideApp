@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-        
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <application
         android:label="tour_guide_app"
         android:name="${applicationName}"
@@ -51,6 +53,9 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+                   android:value="AIzaSyCzWq-iFOQsL6MTp3QNZ416FJdW5ibXVs8"/>
 
     </application>
     <!-- Required to query activities that can process text, see:

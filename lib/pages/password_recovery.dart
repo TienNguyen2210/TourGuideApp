@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tour_guide_app/service/auth.dart';
 
 class PasswordRecoveryScreen extends StatefulWidget {
