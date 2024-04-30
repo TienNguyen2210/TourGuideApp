@@ -17,12 +17,11 @@ class FilterOption {
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
-
   @override
-  State<SearchSreen> createState() => _SearchSreenState();
+  State<SearchScreen> createState() => _SearchSreenState();
 }
 
-class _SearchSreenState extends State<SearchSreen> {
+class _SearchSreenState extends State<SearchScreen> {
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController searchController = TextEditingController();
   Set<Marker> markers = {};
