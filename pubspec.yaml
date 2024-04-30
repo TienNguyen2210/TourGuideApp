@@ -51,6 +51,9 @@ dependencies:
   # This adds in the rating for the post.
   flutter_rating_bar: ^4.0.0
 
+  # For testing log-in
+  provider: ^6.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
