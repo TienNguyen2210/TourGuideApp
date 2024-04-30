@@ -40,9 +40,15 @@ dependencies:
   google_sign_in: ^6.2.1
   flutter_facebook_auth: ^6.2.0
 
+  # This adds in the rating for the post.
+  flutter_rating_bar: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # Mockito is used to create mock objects for testing
+  mockito: ^5.0.16
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
