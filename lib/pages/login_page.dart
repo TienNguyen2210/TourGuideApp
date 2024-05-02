@@ -136,16 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: ElevatedButton(
                   onPressed: googleSignIn,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(27),  // Ensuring the button has rounded corners
-                    ),
-                  ),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 20,  // Adjust the spacing between elements inside Wrap
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: const [
                       Image(image: AssetImage('assets/googleLogo.png'), width: 25, height: 25),
+                      SizedBox(width: 70),
                       Text('Sign In with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
                     ],
                   ),
@@ -153,22 +148,22 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 10),
               Container(
-                width: 380,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: facebookSignIn,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 59, 89, 152),
-                  ),
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 10, // This replaces the SizedBox for spacing
-                    children: [
-                      Icon(Icons.facebook, color: Colors.white, size: 33),
-                      Text('Sign In with Facebook', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
-                    ],
-                  ),
-                ),
+                  width: 380,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: facebookSignIn,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 59, 89, 152),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.facebook, color: Colors.white, size: 33),
+                        SizedBox(width: 57),
+                        Text('Sign In with Facebook', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                      ],
+                    ),
+                  )
               ),
               SizedBox(height: 13),
               Row(
