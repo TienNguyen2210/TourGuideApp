@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
           foregroundColor: Color.fromARGB(255, 83, 81, 81),
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0), // Add padding around the entire Column
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Expanded(
@@ -31,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                       child: Card(
                         color: Color.fromARGB(255, 83, 81, 81),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center, // Center the children vertically
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               "Location Name",
