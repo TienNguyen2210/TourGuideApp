@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import '/post/post.dart';
+import '../models/post.dart';
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});

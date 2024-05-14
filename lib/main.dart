@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:tour_guide_app/bottom_navigation.dart';
+import 'package:tour_guide_app/service/locationProvider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,9 +23,12 @@ class TourMateApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BottomNavigation(),
+    return ChangeNotifierProvider(
+      create: (context) => LocationProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: BottomNavigation(),
+      ),
     );
   }
 }

@@ -136,12 +136,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: ElevatedButton(
                   onPressed: googleSignIn,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Image(image: AssetImage('assets/googleLogo.png'), width: 25, height: 25),
+                    children: [
+                      Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.white,
+                        ),
+                        child: Center(
+                          child: Container(
+                            width: 20,
+                            height: 20,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image(image: AssetImage('assets/googleLogo.png'))
+                            ),
+                          ),
+                        )
+                      ),
                       SizedBox(width: 70),
-                      Text('Sign In with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
+                      Text('Sign In with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
                     ],
                   ),
                 ),
@@ -157,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
+                      children: const [
                         Icon(Icons.facebook, color: Colors.white, size: 33),
                         SizedBox(width: 57),
                         Text('Sign In with Facebook', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
