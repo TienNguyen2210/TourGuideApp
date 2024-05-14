@@ -1,8 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
+import 'package:tour_guide_app/service/locationProvider.dart';
 
 class GoogleMapWidget extends StatefulWidget {
   final Set<Marker> markers;
@@ -16,13 +17,12 @@ class GoogleMapWidget extends StatefulWidget {
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   Location locationController = Location();
   late GoogleMapController mapController;
-  LatLng? currentPosition;
   /* Map<PolylineId, Polyline> polylines = {}; */
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async => await getCurrentLocation());
+    getCurrentLocation();
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -31,12 +31,15 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final locationProvider = Provider.of<LocationProvider>(context);
+    final currentPosition = locationProvider.userLocation;
+    
     return currentPosition == null 
         ? const Center(child: CircularProgressIndicator()) 
         : GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: currentPosition!,
+              target: currentPosition,
               zoom: 15.0,
             ),
             markers: widget.markers,  
@@ -68,10 +71,12 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     locationController.onLocationChanged.listen((currentLocation) {
       if(currentLocation.latitude != null && currentLocation.longitude != null) {
         setState(() {
-          currentPosition = LatLng(
+          final newLocation = LatLng(
             currentLocation.latitude!,
             currentLocation.longitude!,
           );
+
+          Provider.of<LocationProvider>(context, listen: false).updateUserLocation(newLocation);  
         });
       }
     });
