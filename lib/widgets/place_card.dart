@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tour_guide_app/models/place.dart';
 
@@ -64,7 +65,7 @@ class PlaceCard extends StatelessWidget {
                       ),
                       Spacer(),
                       Container(
-                        height: 28,
+                        height: 25,
                         width: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),

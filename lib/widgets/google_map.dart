@@ -17,12 +17,19 @@ class GoogleMapWidget extends StatefulWidget {
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   Location locationController = Location();
   late GoogleMapController mapController;
+  StreamSubscription<LocationData>? locationSubscription;
   /* Map<PolylineId, Polyline> polylines = {}; */
 
   @override
   void initState() {
     super.initState();
     getCurrentLocation();
+  }
+
+  @override
+  void dispose() {
+    locationSubscription?.cancel();
+    super.dispose();
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -68,7 +75,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
       }
     }
     
-    locationController.onLocationChanged.listen((currentLocation) {
+    locationSubscription = locationController.onLocationChanged.listen((currentLocation) {
       if(currentLocation.latitude != null && currentLocation.longitude != null) {
         setState(() {
           final newLocation = LatLng(
