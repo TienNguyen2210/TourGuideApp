@@ -147,9 +147,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(height: 5),
                             Row(
                               children: [
-                                Text(
-                                '${place.vicinity}',
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 240, 165, 5)),
+                                Flexible(
+                                  flex: 2,
+                                  child: Text(
+                                  '${place.vicinity}',
+                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 240, 165, 5)),
+                                  ),
                                 ),
                                 Spacer(),
                                 Container(

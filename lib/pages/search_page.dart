@@ -201,9 +201,9 @@ class _SearchSreenState extends State<SearchScreen> {
       keyword: keyword
     );
     /* BitmapDescriptor bitmapDescriptor = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(30, 30)),
-      'assets/marker.jpg'
-    ); */
+      ImageConfiguration(size: Size(5, 5)),
+      'assets/marker.png'
+    );  */
     if (response.status == "OK") {
       setState(() {
         markers.clear();
