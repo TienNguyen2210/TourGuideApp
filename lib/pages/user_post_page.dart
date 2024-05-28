@@ -108,9 +108,9 @@ class UserPostScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => PostScreen()));
               },
-              child: Text('Add', style: TextStyle(color: Colors.white)),
+              child: Text('+ Add', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Color.fromARGB(255, 231, 209, 7),
                 minimumSize: Size(double.infinity, 50),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),

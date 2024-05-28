@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../models/post.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart' as geocoding;
 
 class PostScreen extends StatefulWidget {
   const PostScreen({super.key});
@@ -14,48 +12,9 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   String? _selectedCategory;
   double _rating = 0;
-  String currentLocation = '';
 
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-
-  Future<void> getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.'
-      );
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-    List<geocoding.Placemark> placemarks = await geocoding
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    geocoding.Placemark place = placemarks[0];
-    setState(() {
-      currentLocation = '${place.locality}, ${place.country}';
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getCurrentLocation();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +106,7 @@ class _PostScreenState extends State<PostScreen> {
           category: _selectedCategory!,
           rating: _rating,
           description: _descriptionController.text,
-          location: currentLocation
+          location: 'Seattle, WA'
       );
       showDialog(
         context: context,
