@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tour_guide_app/models/place.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:tour_guide_app/widgets/place_card.dart';
 
 class PlaceList extends StatelessWidget {
-  final List<Place> places; 
+  final List<PlacesSearchResult> places; 
   
   const PlaceList({super.key, required this.places});
 

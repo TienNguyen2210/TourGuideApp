@@ -7,8 +7,9 @@ import 'package:tour_guide_app/service/locationProvider.dart';
 
 class GoogleMapWidget extends StatefulWidget {
   final Set<Marker> markers;
+  final Function(GoogleMapController controller) onMapCreated;
 
-  const GoogleMapWidget({super.key, required this.markers});
+  const GoogleMapWidget({super.key, required this.markers, required this.onMapCreated});
 
   @override
   State<GoogleMapWidget> createState() => _GoogleMapWidgetState();
@@ -16,7 +17,6 @@ class GoogleMapWidget extends StatefulWidget {
 
 class _GoogleMapWidgetState extends State<GoogleMapWidget> {
   Location locationController = Location();
-  late GoogleMapController mapController;
   StreamSubscription<LocationData>? locationSubscription;
   /* Map<PolylineId, Polyline> polylines = {}; */
 
@@ -32,10 +32,6 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     super.dispose();
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
   @override
   Widget build(BuildContext context) {
     final locationProvider = Provider.of<LocationProvider>(context);
@@ -44,7 +40,7 @@ class _GoogleMapWidgetState extends State<GoogleMapWidget> {
     return currentPosition == null 
         ? const Center(child: CircularProgressIndicator()) 
         : GoogleMap(
-            onMapCreated: _onMapCreated,
+            onMapCreated: widget.onMapCreated,
             initialCameraPosition: CameraPosition(
               target: currentPosition,
               zoom: 15.0,

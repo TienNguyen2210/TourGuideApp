@@ -15,7 +15,7 @@ class UserProfile extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               // Display user profile picture here
-              // Example: backgroundImage: NetworkImage(_auth.currentUser.photoURL),
+              backgroundImage: NetworkImage('https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg'),  // test
             ),
             SizedBox(height: 20),
             Text(

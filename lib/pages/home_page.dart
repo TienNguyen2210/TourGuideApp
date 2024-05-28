@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tour_guide_app/service/auth.dart';
 import 'package:tour_guide_app/utilities/constant.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:google_maps_webservice/places.dart';
+import 'package:tour_guide_app/widgets/place_card_home.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,12 +16,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String currentLocation = '';
   List<PlacesSearchResult> places = [];
+  List<PlacesSearchResult> popularDestinations = [];
 
   @override
   void initState() {
     super.initState();
     getCurrentLocation();
     fetchThingsToDo();
+    fetchPopularDestinations();
   }
 
   Future<void> getCurrentLocation() async { 
@@ -60,12 +64,31 @@ class _HomeScreenState extends State<HomeScreen> {
     PlacesSearchResponse response = await locations.searchNearbyWithRadius(
       Location(lat: position.latitude, lng: position.longitude),
       1000,
-      keyword: 'restaurant',
+      keyword: 'restaurant', // temporary keyword because there is no things to do nearby
     );
 
     if (response.status == "OK") {
       setState(() {
         places = response.results;
+      });
+    } else {
+      print(response.errorMessage);
+    }
+  }
+
+  Future<void> fetchPopularDestinations() async {
+    Position position = await Geolocator.getCurrentPosition();
+    final locations = GoogleMapsPlaces(apiKey: googleMapsApiKey);
+
+    PlacesSearchResponse response = await locations.searchNearbyWithRadius( 
+      Location(lat: position.latitude, lng: position.longitude),
+      1000,
+      keyword: 'shop',
+    );
+
+    if (response.status == "OK") {
+      setState(() {
+        popularDestinations = response.results;
       });
     } else {
       print(response.errorMessage);
@@ -82,108 +105,89 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Display current location
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  currentLocation,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              SizedBox(height: 16),
-              Divider(
-                color: Color.fromARGB(255, 231, 226, 226),
-                thickness: 1.0,
-              ),
-              SizedBox(height: 25),
-              Text(
-                'Experiences in spotlight', 
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
-              ),
-              SizedBox(height: 12),
-              SizedBox(
-                height: 350, 
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: places.length, 
-                  itemBuilder: (context, index) {
-                    final place = places[index];
-                    String photoUrl = '';
-                    if (place.photos.isNotEmpty) {
-                      photoUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photoReference}&key=$googleMapsApiKey';
-                    }
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 20.0, top: 8.0),
-                      child: Container(
-                        width: 300, 
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: Text(
+                            // Display the name of user
+                            'Hi, ${Auth().currentUser?.email ?? 'User'}!',
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 225,
-                              width: 300,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15),
-                                child: photoUrl.isNotEmpty ? Image.network(photoUrl, fit: BoxFit.cover) : SizedBox.shrink()
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              place.name, 
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                              textAlign: TextAlign.start
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              place.openingHours!.openNow ? 'Open Now' : 'Closed', 
-                              style: TextStyle(fontSize: 14 , fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 119, 118, 118)),                  
-                            ),
-                            SizedBox(height: 5),
-                            Row(
-                              children: [
-                                Flexible(
-                                  flex: 2,
-                                  child: Text(
-                                  '${place.vicinity}',
-                                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 240, 165, 5)),
-                                  ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  height: 28,
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: Color.fromARGB(255, 3, 197, 3),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        place.rating.toString(),
-                                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
-                                      ),
-                                      SizedBox(width: 3),
-                                      Icon(Icons.star, color: Colors.white, size: 14),
-                                    ]
-                                  ),
-                                ),
-                              ],
-                            )
-                          ]  
-                        ),
-                      ),
-                    );
-                  },
+                        SizedBox(height: 5),
+                        // Display current location
+                        Row(children: [
+                          Icon(Icons.location_on, size: 17, color: Color.fromARGB(255, 58, 204, 114)), 
+                          SizedBox(width: 2),
+                          Text(
+                          currentLocation,
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        )]),
+                      ],
+                    ),
+                    Spacer(),
+                    CircleAvatar(
+                      radius: 23,
+                      // Display user profile picture here
+                      // backgroundImage: NetworkImage(Auth().currentUser?.photoURL),
+                      backgroundImage: NetworkImage('https://pbs.twimg.com/media/FjU2lkcWYAgNG6d.jpg'),  // test
+                    )
+                  ],
                 ),
-              ), 
-            ],
+                SizedBox(height: 16),
+                Divider(
+                  color: Color.fromARGB(255, 231, 226, 226),
+                  thickness: 1.0,
+                ),
+                SizedBox(height: 15),
+                Text(
+                  'Experiences in spotlight', 
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                ),
+                SizedBox(height: 12),
+                SizedBox(
+                  height: 350, 
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: places.length, 
+                    itemBuilder: (context, index) {
+                      final place = places[index];
+                      return PlaceCardHome(place: place);
+                    },
+                  ),
+                ),
+                Divider(
+                  color: Color.fromARGB(255, 231, 226, 226),
+                  thickness: 1.0,
+                ),
+                SizedBox(height: 15),
+                Text(
+                  'Popular Destinations', 
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                ),
+                SizedBox(height: 12),
+                SizedBox(
+                  height: 350, 
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: popularDestinations.length, 
+                    itemBuilder: (context, index) {
+                      final nightclub = popularDestinations[index];
+                      return PlaceCardHome(place: nightclub);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
