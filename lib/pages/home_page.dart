@@ -21,9 +21,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getCurrentLocation();
-    fetchThingsToDo();
-    fetchPopularDestinations();
+    getCurrentLocation().then((_) {
+      fetchThingsToDo();
+      fetchPopularDestinations();
+    });
   }
 
   Future<void> getCurrentLocation() async { 
