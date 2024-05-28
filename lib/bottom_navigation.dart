@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tour_guide_app/pages/home_page.dart';
-import 'package:tour_guide_app/pages/post_page.dart';
+import 'package:tour_guide_app/pages/user_post_page.dart';
 import 'package:tour_guide_app/pages/profile_page.dart';
 import 'package:tour_guide_app/pages/search_page.dart';
 
@@ -17,7 +17,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   final List<Widget> _screens = <Widget>[
     HomeScreen(),
     SearchScreen(),
-    PostScreen(),
+    UserPostScreen(),
     ProfileScreen(),
   ];
 
