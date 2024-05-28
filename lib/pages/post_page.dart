@@ -12,7 +12,9 @@ class PostScreen extends StatefulWidget {
 class _PostScreenState extends State<PostScreen> {
   String? _selectedCategory;
   double _rating = 0;
+
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,16 @@ class _PostScreenState extends State<PostScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            const Text('Name:', style: TextStyle(fontSize: 16)),
+            // Label for the name field
+            TextField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                hintText: 'Enter post name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
             const Text('Select Category:', style: TextStyle(fontSize: 16)),
             DropdownButton<String>(
               value: _selectedCategory,
@@ -54,7 +66,8 @@ class _PostScreenState extends State<PostScreen> {
               allowHalfRating: true,
               itemCount: 5,
               itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
+              itemBuilder: (context, _) =>
+              const Icon(Icons.star, color: Colors.amber),
               onRatingUpdate: (rating) {
                 setState(() {
                   _rating = rating;
@@ -85,32 +98,53 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   void _createPost() {
-    if (_selectedCategory != null && _rating != 0 && _descriptionController.text.isNotEmpty) {
+    if (_selectedCategory != null && _rating != 0 &&
+        _descriptionController.text.isNotEmpty &&
+        _nameController.text.isNotEmpty) {
       Post newPost = Post(
-        category: _selectedCategory!,
-        rating: _rating,
-        description: _descriptionController.text,
-        location: "location"
+          name: _nameController.text,
+          category: _selectedCategory!,
+          rating: _rating,
+          description: _descriptionController.text,
+          location: 'Seattle, WA'
       );
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Post Created'),
-          content: Text(
-            'Category: ${newPost.category}\nRating: ${newPost.rating}\nDescription: ${newPost.description}',
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
+        builder: (context) =>
+            AlertDialog(
+              title: const Text('Post Created'),
+              content: Text(
+                'Name: ${newPost.name}\nCategory: ${newPost
+                    .category}\nRating: ${newPost
+                    .rating}\nDescription: ${newPost
+                    .description}\nLocation: ${newPost.location}',
+              ),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
             ),
-          ],
-        ),
       );
     } else {
-
+      // Optionally handle the case where not all fields are filled
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: const Text('Error'),
+              content: const Text('Please fill in all fields.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+      );
     }
   }
 }
