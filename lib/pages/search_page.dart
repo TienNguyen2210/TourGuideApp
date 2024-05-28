@@ -1,14 +1,11 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
-import 'package:tour_guide_app/models/place.dart';
 import 'package:tour_guide_app/service/locationProvider.dart';
 import 'package:tour_guide_app/utilities/constant.dart';
 import 'package:tour_guide_app/widgets/google_map.dart';
-import 'package:google_api_headers/google_api_headers.dart';
 import 'package:tour_guide_app/widgets/place_list.dart'; 
 
 class FilterOption {
@@ -27,11 +24,11 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchSreenState extends State<SearchScreen> {
   final homeScaffoldKey = GlobalKey<ScaffoldState>();
-  List<Place> placesList = [];
+  late GoogleMapController mapController;
+  List<PlacesSearchResult> placesList = [];
   TextEditingController searchController = TextEditingController();
   Set<Marker> markers = {};
   String selectedOption = '';
-  
 
   final List<FilterOption> filterOptions = [
     FilterOption(text: 'Coffee', iconData: Icons.local_cafe),
@@ -40,6 +37,10 @@ class _SearchSreenState extends State<SearchScreen> {
     FilterOption(text: 'Hotels', iconData: Icons.hotel),
     FilterOption(text: 'Museums', iconData: Icons.museum_outlined),
   ];
+  
+  void onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
 
   List<Widget> buildFilterChips(List<FilterOption> filters) {
     return filterOptions.map((option) {
@@ -83,7 +84,7 @@ class _SearchSreenState extends State<SearchScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            GoogleMapWidget(markers: markers),
+            GoogleMapWidget(markers: markers, onMapCreated: onMapCreated),
             Positioned(
               top: 16.0,
               left: 16.0,
@@ -103,11 +104,46 @@ class _SearchSreenState extends State<SearchScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: TextField(
-                    controller: searchController,
-                    decoration: InputDecoration(
+                  child: GooglePlaceAutoCompleteTextField(
+                    textEditingController: searchController,
+                    googleAPIKey: googleMapsApiKey,
+                    itemClick: (prediction) {
+                      searchController.text = prediction.description!;
+                      searchController.selection = TextSelection.fromPosition(TextPosition(offset: prediction.description!.length));
+                    },
+                    getPlaceDetailWithLatLng: (prediction) {
+                      double lat = double.parse(prediction.lat!);
+                      double lng = double.parse(prediction.lng!);
+                      markers.clear();  
+                      markers.add(Marker(
+                        markerId: MarkerId(prediction.placeId!),
+                        position: LatLng(lat , lng),
+                        infoWindow: InfoWindow(
+                          title: prediction.description!,
+                        ),
+                      ));
+                      mapController.animateCamera(
+                        CameraUpdate.newCameraPosition(
+                          CameraPosition(target: LatLng(lat, lng), zoom: 15.0)
+                        )
+                      );
+                    },
+                    itemBuilder: (context, index, prediction) {
+                      return Container(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(children: [
+                          Icon(Icons.place, color: Color.fromARGB(255, 98, 100, 98)),
+                          SizedBox(width: 10),
+                          Flexible(child: Text(prediction.description!)),
+                          ],
+                        ),
+                      );
+                    },
+                    boxDecoration: BoxDecoration(
+                      border: Border.all(color: Colors.white),
+                    ),
+                    inputDecoration: InputDecoration(
                       hintText: 'Search...',
-                      border: InputBorder.none,
                       prefixIcon: Icon(Icons.place, color: Color.fromARGB(255, 48, 153, 64)),
                     ),
                   ),
@@ -139,57 +175,6 @@ class _SearchSreenState extends State<SearchScreen> {
     );
   }
 
-  Future<void> handleSearch() async {
-    Prediction? p = await PlacesAutocomplete.show(
-      context: context, 
-      apiKey: googleMapsApiKey, 
-      onError: onError,
-      mode: Mode.overlay, 
-      language: "en", 
-    );
-
-     displayPrediction(p!, homeScaffoldKey.currentState);
-  }
-
-  void onError(PlacesAutocompleteResponse response) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      elevation: 0,
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: Colors.transparent,
-      content: AwesomeSnackbarContent(
-        title: 'Message',
-        message: response.errorMessage!,
-        contentType: ContentType.failure,
-      ), 
-    ));
-  }
-
-  Future<void> displayPrediction(Prediction p, ScaffoldState? currentState) async {
-    GoogleMapsPlaces places = GoogleMapsPlaces(
-      apiKey: googleMapsApiKey,
-      apiHeaders: await const GoogleApiHeaders().getHeaders(),
-    );
-    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
-    double lat = detail.result.geometry!.location.lat;
-    double lng = detail.result.geometry!.location.lng;
-    markers.clear();
-    markers.add(Marker(
-      markerId: MarkerId(p.placeId!),
-      position: LatLng(lat, lng),
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
-      infoWindow: InfoWindow(
-        title: detail.result.name,
-      ),
-    ));
-    
-    /* setState(() {});
-    mapController!.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(lat, lng), zoom: 15.0),
-      ),
-    ); */
-  }
-
   Future<void> performNearBySearch(BuildContext context, String keyword) async {
     final places = GoogleMapsPlaces(apiKey: googleMapsApiKey);
     final locationProvider = Provider.of<LocationProvider>(context, listen: false);
@@ -218,21 +203,7 @@ class _SearchSreenState extends State<SearchScreen> {
               title: result.name,
             ),
           ));
-          
-          String photoUrl = '';
-          if (result.photos.isNotEmpty) {
-            photoUrl = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${result.photos[0].photoReference}&key=$googleMapsApiKey';
-          } else {
-            photoUrl = result.icon!;
-          }
-          final place = Place(
-            id: result.placeId,
-            type: result.types[0],
-            name: result.name,  
-            image: photoUrl,
-            rating: result.rating.toString(),
-          );
-          placesList.add(place);
+          placesList.add(result);
         }
       });
     } else {
